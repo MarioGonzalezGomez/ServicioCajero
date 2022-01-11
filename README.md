@@ -1,1 +1,23 @@
 # ServicioCajero
+
+En esencia, es un cliente servidor multihilo
+
+Tenemos que convertirlo en Servicio. Necesitaremos buscar info de ello, porque un servicio
+se ejucuta en segundo plano.
+
+En el programa, tendremos que meter el email/pin
+(el pin debe ir cifrado en SHA 512)
+
+, seleccionar lo que queremos hacer
+	Sacar efectivo (siempre y cuando no supere un límite diario y tengamos saldo)
+	Realizar ingreso (máx 1000 euros)
+	Consultar saldo
+
+El servidor tiene un log, un fichero con la información que saldría por consola.
+
+Tendremos un Usuario con email, pin, saldo, límite diario
+	Movimientos: fecha, tipo, cantidad (si es ingreso o retirada), usuario
+
+Opciones recomendadas:
+Que haya una lista de usuarios registrados
+O usar una base de datos SQL o NoSql o ficheros
