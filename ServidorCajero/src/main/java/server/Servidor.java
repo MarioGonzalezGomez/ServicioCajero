@@ -1,5 +1,7 @@
 package server;
 
+import DB.MongoController;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,6 +14,7 @@ public class Servidor {
 
         System.out.println("Arrancando el servicio de cajero automático");
 
+        MongoController controller = MongoController.getInstance();
 
         try {
             servidor = new ServerSocket(puerto);
@@ -21,7 +24,7 @@ public class Servidor {
 
                 System.out.println("Peticion de cliente -> " + cliente.getInetAddress() + " --- " + cliente.getPort());
 
-                GestionCliente gc = new GestionCliente(cliente);
+                GestionCliente gc = new GestionCliente(cliente, controller);
                 gc.start();
             }
         } catch (Exception e) {
