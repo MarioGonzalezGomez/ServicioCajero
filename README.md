@@ -3,7 +3,7 @@
 En esencia, es un cliente servidor multihilo
 
 Tenemos que convertirlo en Servicio. Necesitaremos buscar info de ello, porque un servicio
-se ejucuta en segundo plano.
+se ejucuta en segundo plano. Debe valer para linux y recomandablemente para Windows. 
 
 En el programa, tendremos que meter el email/pin
 (el pin debe ir cifrado en SHA 512)
@@ -14,9 +14,11 @@ En el programa, tendremos que meter el email/pin
 	Consultar saldo
 
 El servidor tiene un log, un fichero con la información que saldría por consola.
+Se puede usar la librería log4J.
 
 Tendremos un Usuario con email, pin, saldo, límite diario
 	Movimientos: fecha, tipo, cantidad (si es ingreso o retirada), usuario
+
 
 Opciones recomendadas:
 Que haya una lista de usuarios registrados
