@@ -39,7 +39,6 @@ public class GestionCliente extends Thread {
         boolean pinCorrecto = false;
         boolean salir = false;
         try {
-            //no olvidar escribir en el log estos mensajes
 
             controller.open();
             MongoCollection<Usuario> userCollection = controller.getCollection("test", "usuarios", Usuario.class);
@@ -51,6 +50,8 @@ public class GestionCliente extends Thread {
                 emailCorrecto = comprobarEmail(dis.readUTF(), userCollection);
                 if (!emailCorrecto) {
                     dos.writeUTF("El email no es correcto o no está registrado, pruebe de nuevo");
+                } else {
+                    dos.writeUTF("Email introducido con éxito");
                 }
             }
             dos.writeUTF("Introduzca su pin de 4 dígitos");
@@ -58,6 +59,8 @@ public class GestionCliente extends Thread {
                 pinCorrecto = comprobarPin(dis.readInt());
                 if (!pinCorrecto) {
                     dos.writeUTF("El pin no es correcto, pruebe de nuevo");
+                } else {
+                    dos.writeUTF("Pin reconocido. Bienvenido al servicio de cajero automático");
                 }
             }
             List<Movimiento> movimientos = movimientoCollection.find(eq("usuario", user.getEmail())).into(new ArrayList<>());
@@ -103,7 +106,7 @@ public class GestionCliente extends Thread {
     }
 
 
-    private void ingresarDinero(double cantidad, List<Movimiento> movimientos, MongoCollection<Movimiento> movimientoCollection, DataOutputStream dos) {
+    private void ingresarDinero(double cantidad, List<Movimiento> movimientos, MongoCollection<Movimiento> movimientoCollection, DataOutputStream dos) throws IOException {
         if (cantidad > 0) {
             user.setSaldo(user.getSaldo() + cantidad);
             movimiento = new Movimiento();
@@ -114,10 +117,13 @@ public class GestionCliente extends Thread {
 
             movimientos.add(movimiento);
             movimientoCollection.insertOne(movimiento);
+            dos.writeUTF("Se ha hecho correctamente el ingreso de: " + cantidad + "€\nSu saldo actualizado es de: " + user.getSaldo() + " €");
+        } else {
+            dos.writeUTF("La cantidad introducida no es válida");
         }
     }
 
-    private void retirarEfectivo(double cantidad, List<Movimiento> movimientos, MongoCollection<Movimiento> movimientoCollection, DataOutputStream dos) {
+    private void retirarEfectivo(double cantidad, List<Movimiento> movimientos, MongoCollection<Movimiento> movimientoCollection, DataOutputStream dos) throws IOException {
         if (cantidad > 0 && user.getSaldo() - cantidad >= 0) {
             user.setSaldo(user.getSaldo() - cantidad);
             movimiento = new Movimiento();
@@ -128,6 +134,14 @@ public class GestionCliente extends Thread {
 
             movimientos.add(movimiento);
             movimientoCollection.insertOne(movimiento);
+
+            dos.writeUTF("Se ha hecho correctamente la retirada de: " + cantidad + "€\nSu saldo actualizado es de: " + user.getSaldo() + " €");
+        }
+        if (cantidad <= 0) {
+            dos.writeUTF("Lo siento, " + cantidad + " no es una cantidad válida para la retirada");
+        }
+        if (user.getSaldo() - cantidad < 0) {
+            dos.writeUTF("Lo siento, parece que no dispone de efectivo suficiente para la retirada");
         }
     }
 
