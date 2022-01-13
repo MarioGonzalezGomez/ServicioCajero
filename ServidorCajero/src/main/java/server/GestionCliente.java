@@ -46,8 +46,9 @@ public class GestionCliente extends Thread {
 
             dos.writeUTF("Introduzca su email");
             email = dis.readUTF();
+            System.out.println(email);
             while (!emailCorrecto) {
-                emailCorrecto = comprobarEmail(dis.readUTF(), userCollection);
+                emailCorrecto = comprobarEmail(email, userCollection);
                 if (!emailCorrecto) {
                     dos.writeUTF("El email no es correcto o no está registrado, pruebe de nuevo");
                 } else {

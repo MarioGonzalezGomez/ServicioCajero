@@ -63,11 +63,10 @@ public class MongoController {
         serverUrl = "localhost";
         serverPort = "27017";
         dataBaseName = "cajeroDB";
-        //user = "mongoadmin";
-        //password = "mongopass";
+        user = "mario";
+        password = "1234";
 
-        connectionString = new ConnectionString("mongodb://" +// user + ":" + password +
-                 "@" + serverUrl + ":" + serverPort + "/" + dataBaseName + "?authSource=admin");
+        connectionString = new ConnectionString("mongodb://" + user + ":" + password + "@" + serverUrl + ":" + serverPort + "/" + dataBaseName + "?authSource=admin");
 
         pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
         codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
