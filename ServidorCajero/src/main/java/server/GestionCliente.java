@@ -56,7 +56,7 @@ public class GestionCliente extends Thread {
             }
             dos.writeUTF("Introduzca su pin de 4 dígitos");
             while (!pinCorrecto) {
-                pinCorrecto = comprobarPin(dis.readInt());
+                pinCorrecto = comprobarPin(dis.readUTF());
                 if (!pinCorrecto) {
                     dos.writeUTF("El pin no es correcto, pruebe de nuevo");
                 } else {
@@ -124,7 +124,7 @@ public class GestionCliente extends Thread {
     }
 
     private void retirarEfectivo(double cantidad, List<Movimiento> movimientos, MongoCollection<Movimiento> movimientoCollection, DataOutputStream dos) throws IOException {
-        if (cantidad > 0 && user.getSaldo() - cantidad >= 0) {
+        if (cantidad > 0 && user.getSaldo() - cantidad >= 0 && user.getRetiradoHoy() + cantidad < user.getLimite()) {
             user.setSaldo(user.getSaldo() - cantidad);
             movimiento = new Movimiento();
             movimiento.setCantidad(cantidad);
@@ -143,11 +143,13 @@ public class GestionCliente extends Thread {
         if (user.getSaldo() - cantidad < 0) {
             dos.writeUTF("Lo siento, parece que no dispone de efectivo suficiente para la retirada");
         }
+        if (user.getRetiradoHoy() + cantidad < user.getLimite()) {
+            dos.writeUTF("Lo siento, parece que se ha superado el límite diario de: " + user.getLimite() + " € diarios");
+        }
     }
 
     private double consultarSaldo(List<Movimiento> movimientos, MongoCollection<Movimiento> movimientoCollection) {
         movimiento = new Movimiento();
-        // movimiento.setCantidad(cantidad);
         movimiento.setFecha(LocalDateTime.now());
         movimiento.setTipo(Movimiento.tipoMovimiento.CONSULTA);
         movimiento.setUsuario(user.getEmail());
@@ -160,7 +162,6 @@ public class GestionCliente extends Thread {
 
     private void salir(List<Movimiento> movimientos, MongoCollection<Movimiento> movimientoCollection) {
         movimiento = new Movimiento();
-        // movimiento.setCantidad(cantidad);
         movimiento.setFecha(LocalDateTime.now());
         movimiento.setTipo(Movimiento.tipoMovimiento.SALIR);
         movimiento.setUsuario(user.getEmail());
@@ -174,8 +175,8 @@ public class GestionCliente extends Thread {
         return user != null;
     }
 
-    private boolean comprobarPin(int readUTF) {
-        return user.getPin() == readUTF;
+    private boolean comprobarPin(String readUTF) {
+        return user.getPin().equals(readUTF);
     }
 
 

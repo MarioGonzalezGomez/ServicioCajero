@@ -1,5 +1,7 @@
 package client;
 
+import cifrador.Cifrador;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,6 +27,7 @@ public class ClienteHilo extends Thread {
         String respuesta = "pruebe de nuevo";
         boolean salir = false;
         int option;
+        Cifrador cifrador = new Cifrador();
         try {
             //Recibir mensaje de introducir email y enviarlo
             System.out.println(dis.readUTF());
@@ -36,7 +39,7 @@ public class ClienteHilo extends Thread {
             respuesta = "pruebe de nuevo";
             System.out.println(dis.readUTF());
             while (respuesta.contains("pruebe")) {
-                dos.writeInt(sc.nextInt());
+                dos.writeUTF(cifrador.get_SHA_512_SecurePassword(sc.nextLine()));
                 respuesta = dis.readUTF();
                 System.out.println(respuesta);
             }
@@ -72,7 +75,7 @@ public class ClienteHilo extends Thread {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 server.close();
             } catch (IOException e) {
