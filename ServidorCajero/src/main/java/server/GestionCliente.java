@@ -41,8 +41,8 @@ public class GestionCliente extends Thread {
         try {
 
             controller.open();
-            MongoCollection<Usuario> userCollection = controller.getCollection("test", "usuarios", Usuario.class);
-            MongoCollection<Movimiento> movimientoCollection = controller.getCollection("test", "movimientos", Movimiento.class);
+            MongoCollection<Usuario> userCollection = controller.getCollection("cajeroDB", "usuarios", Usuario.class);
+            MongoCollection<Movimiento> movimientoCollection = controller.getCollection("cajeroDB", "movimientos", Movimiento.class);
 
             dos.writeUTF("Introduzca su email");
             email = dis.readUTF();
