@@ -1,4 +1,4 @@
-# ServicioCajero
+# ServicioCajero 💸
 
 En esencia, es un cliente servidor multihilo
 
@@ -23,3 +23,11 @@ Tendremos un Usuario con email, pin, saldo, límite diario
 Opciones recomendadas:
 Que haya una lista de usuarios registrados
 O usar una base de datos SQL o NoSql o ficheros
+
+---
+
+## Antes de iniciar :rocket:
+
+Importante ejecutar en consola el siguiente comando, estando situado en nuestra carpeta docker con el yml
+`docker-compose up -d`
+
