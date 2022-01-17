@@ -5,9 +5,6 @@ import server.GestionCliente;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-//TODO: Utilizar los log
-//TODO: Ligar con la base de datos mongoDB
 //TODO: Poner como servicio
 public class Servidor {
     public static void main(String[] args) throws IOException {

@@ -20,8 +20,10 @@ services:
     command: --auth
     # Monto la unidad y le cargo unos datos
     volumes:
-      # - ./init:/docker-entrypoint-initdb.d
+      - ./init:/docker-entrypoint-initdb.d
       - mongo-vol:/data/db
+volumes:
+  mongo-vol:
    # networks:
     #  - mongo-network
     # restart: always
